@@ -9,7 +9,7 @@ const Index = () => {
       
       <div className="relative">
         <div className="absolute top-24 left-1/2 -translate-x-1/2 bg-neon/20 text-neon px-4 py-2 rounded-full text-sm">
-        Track, Predict, and Protect Your Currency Investments.!
+        Navigate currency markets with confidence!
         </div>
       </div>
 
@@ -17,11 +17,11 @@ const Index = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-24">
             <h1 className="text-4xl md:text-6xl font-semibold mb-6 leading-tight">
-            Track, Predict, and Protect:<br />Empower Your Currency Decisions with Real-Time Insights.
+            Track, Predict, and Protect:<br />Empower Your Currency Decisions
             </h1>
             <p className="text-gray-400 max-w-2xl mx-auto mb-12">
-            RiskLens helps you navigate the dynamic world of currency exchange. With real-time data, predictive insights, and risk analysis, you can make smarter, data-driven financial decisions. 
-            Stay ahead of the market with cutting-edge forecasting models and geopolitical risk tracking.
+            RiskLens helps you navigate currency exchange with real-time data, predictive insights, and risk analysis for smarter financial decisions. 
+            Stay ahead with advanced forecasting and geopolitical tracking.
             </p>
             
             <div className="flex flex-col md:flex-row items-center justify-center gap-6">
@@ -34,27 +34,28 @@ const Index = () => {
 
           <div className="grid md:grid-cols-3 gap-6 mb-24">
             <div className="glass p-6">
-              <h3 className="text-lg font-medium mb-2">Bills Management</h3>
+              <h3 className="text-lg font-medium mb-2">Currency Alerts</h3>
               <p className="text-sm text-gray-400 mb-4">
-                Easily manage, pay and reconcile business bills.
+              Set custom alerts to track exchange rate changes and stay updated.
               </p>
-              <Button variant="outline" className="w-full">Show as List</Button>
+              <Button variant="outline" className="w-full">Set Alert</Button>
             </div>
 
             <div className="glass p-6">
-              <h3 className="text-lg font-medium mb-2">Online Money Exchange</h3>
+              <h3 className="text-lg font-medium mb-2">Market Predictions</h3>
               <p className="text-sm text-gray-400 mb-4">
-                Exchange money online with real-time rates.
+              Get short-term predictions based on real-time data and forecasting models.
               </p>
               <CurrencyConverter />
+              <Button variant="outline" className="w-full">View Predictions</Button>
             </div>
 
             <div className="glass p-6">
-              <h3 className="text-lg font-medium mb-2">My Credit Card</h3>
+              <h3 className="text-lg font-medium mb-2">Geopolitical Risk Tracker</h3>
               <p className="text-sm text-gray-400 mb-4">
-                View and manage your credit card details.
+              Stay informed on global events and their impact on currency markets.
               </p>
-              <Button variant="outline">Show Balance</Button>
+              <Button variant="outline">Track Risks</Button>
             </div>
           </div>
         </div>
