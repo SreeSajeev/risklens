@@ -12,18 +12,18 @@ export function Header() {
         </div>
         
         <nav className="hidden md:flex items-center gap-8">
-          <a href="#" className="text-gray-400 hover:text-white transition-colors">Home</a>
-          <a href="#" className="text-gray-400 hover:text-white transition-colors">Services</a>
-          <a href="#" className="text-gray-400 hover:text-white transition-colors">Market</a>
-          <a href="#" className="text-gray-400 hover:text-white transition-colors">FAQs</a>
+        <a href="#" className="text-gray-400 hover:text-white transition-colors">Dashboard</a>
+        <a href="#" className="text-gray-400 hover:text-white transition-colors">Currency Insights</a>
+        <a href="#" className="text-gray-400 hover:text-white transition-colors">Predictions</a>
+        <a href="#" className="text-gray-400 hover:text-white transition-colors">Risk Analysis</a>
         </nav>
 
         <div className="flex items-center gap-4">
           <Button variant="ghost" className="text-gray-400 hover:text-white">
-            Pricing
+          Features
           </Button>
           <Button className="bg-neon hover:bg-neon/90">
-            Create account
+          Explore RiskLens
           </Button>
         </div>
       </div>

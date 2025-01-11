@@ -36,7 +36,9 @@ const Index = () => {
             <div className="glass p-6">
               <h3 className="text-lg font-medium mb-2">Currency Alerts</h3>
               <p className="text-sm text-gray-400 mb-4">
-              Set custom alerts to track exchange rate changes and stay updated.
+              Set custom alerts to track exchange rate fluctuations,
+              receive real-time notifications,
+              and stay informed about key market movements.
               </p>
               <Button variant="outline" className="w-full">Set Alert</Button>
             </div>
@@ -53,7 +55,9 @@ const Index = () => {
             <div className="glass p-6">
               <h3 className="text-lg font-medium mb-2">Geopolitical Risk Tracker</h3>
               <p className="text-sm text-gray-400 mb-4">
-              Stay informed on global events and their impact on currency markets.
+              Stay informed on global events, 
+              from geopolitical shifts to economic policies,
+              and understand their potential impact on currency markets.
               </p>
               <Button variant="outline">Track Risks</Button>
             </div>
