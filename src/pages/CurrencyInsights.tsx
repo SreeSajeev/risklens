@@ -3,7 +3,7 @@ import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Select } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -11,23 +11,38 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from '@tanstack/react-query';
 import { fetchTopCurrencies } from '@/lib/api';
 import { ArrowUpRight, ArrowDownRight, TrendingUp, LineChart as LineChartIcon } from 'lucide-react';
+import { useToast } from "@/components/ui/use-toast";
+
+interface CurrencyRate {
+  date: string;
+  USD_EUR: number;
+  USD_GBP: number;
+}
 
 const CurrencyInsights = () => {
   const [selectedTimeRange, setSelectedTimeRange] = useState('1W');
-  const [selectedPairs, setSelectedPairs] = useState(['USD/EUR']);
+  const [selectedPair, setSelectedPair] = useState('USD/EUR');
   const [showMovingAverage, setShowMovingAverage] = useState(false);
+  const { toast } = useToast();
 
-  const { data: topCurrencies, isLoading } = useQuery({
+  const { data: topCurrencies, isLoading, error } = useQuery({
     queryKey: ['topCurrencies'],
     queryFn: fetchTopCurrencies,
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Error fetching currency data",
+        description: "Please try again later.",
+      });
+      console.error("API Error:", error);
+    }
   });
 
   // Mock data for demonstration - replace with real API data
-  const mockHistoricalData = [
+  const mockHistoricalData: CurrencyRate[] = [
     { date: '2024-01', USD_EUR: 0.92, USD_GBP: 0.79 },
     { date: '2024-02', USD_EUR: 0.93, USD_GBP: 0.78 },
     { date: '2024-03', USD_EUR: 0.91, USD_GBP: 0.77 },
-    // Add more mock data points
   ];
 
   const trendCards = [
@@ -54,9 +69,27 @@ const CurrencyInsights = () => {
     },
   ];
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-neon"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Card className="p-6">
+          <h2 className="text-xl font-semibold mb-4">Error Loading Data</h2>
+          <p className="text-muted-foreground">Please try refreshing the page.</p>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Navigation */}
       <nav className="fixed top-16 left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-40 py-2">
         <div className="container flex items-center gap-4">
           <Button variant="ghost" className="gap-2">
@@ -71,27 +104,36 @@ const CurrencyInsights = () => {
       </nav>
 
       <main className="container pt-32 pb-16">
-        {/* Filters Panel */}
         <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8">
           <Card className="p-6 h-fit sticky top-32">
             <h3 className="text-lg font-semibold mb-4">Filters</h3>
             <div className="space-y-4">
               <div>
                 <label className="text-sm text-muted-foreground">Time Range</label>
-                <Select>
-                  <option value="1W">1 Week</option>
-                  <option value="1M">1 Month</option>
-                  <option value="3M">3 Months</option>
-                  <option value="1Y">1 Year</option>
+                <Select value={selectedTimeRange} onValueChange={setSelectedTimeRange}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select time range" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1W">1 Week</SelectItem>
+                    <SelectItem value="1M">1 Month</SelectItem>
+                    <SelectItem value="3M">3 Months</SelectItem>
+                    <SelectItem value="1Y">1 Year</SelectItem>
+                  </SelectContent>
                 </Select>
               </div>
               
               <div>
-                <label className="text-sm text-muted-foreground">Currency Pairs</label>
-                <Select multiple>
-                  <option value="USD/EUR">USD/EUR</option>
-                  <option value="USD/GBP">USD/GBP</option>
-                  <option value="USD/JPY">USD/JPY</option>
+                <label className="text-sm text-muted-foreground">Currency Pair</label>
+                <Select value={selectedPair} onValueChange={setSelectedPair}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select currency pair" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="USD/EUR">USD/EUR</SelectItem>
+                    <SelectItem value="USD/GBP">USD/GBP</SelectItem>
+                    <SelectItem value="USD/JPY">USD/JPY</SelectItem>
+                  </SelectContent>
                 </Select>
               </div>
 
@@ -105,7 +147,6 @@ const CurrencyInsights = () => {
           </Card>
 
           <div className="space-y-8">
-            {/* Main Chart */}
             <Card className="p-6">
               <h2 className="text-xl font-semibold mb-6">Historical Comparison</h2>
               <div className="h-[400px] w-full">
@@ -128,7 +169,6 @@ const CurrencyInsights = () => {
               </div>
             </Card>
 
-            {/* Trend Insights */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {trendCards.map((card, index) => (
                 <Card key={index} className="p-6 hover:border-neon transition-colors">
@@ -141,7 +181,6 @@ const CurrencyInsights = () => {
                     {card.icon}
                   </div>
                   <div className="h-[60px] mt-4">
-                    {/* Mini chart placeholder - implement with real data */}
                     <div className="w-full h-full bg-muted/20 rounded animate-pulse" />
                   </div>
                 </Card>
