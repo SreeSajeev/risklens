@@ -11,16 +11,23 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from '@tanstack/react-query';
 import { fetchTopCurrencies } from '@/lib/api';
 import { ArrowUpRight, ArrowDownRight, TrendingUp, LineChart as LineChartIcon } from 'lucide-react';
+import { MultiSelect } from "@/components/ui/multi-select";
 
 const CurrencyInsights = () => {
   const [selectedTimeRange, setSelectedTimeRange] = useState('1W');
-  const [selectedPairs, setSelectedPairs] = useState(['USD/EUR']);
+  const [selectedPairs, setSelectedPairs] = useState<string[]>(['USD/EUR']);
   const [showMovingAverage, setShowMovingAverage] = useState(false);
 
   const { data: topCurrencies, isLoading } = useQuery({
     queryKey: ['topCurrencies'],
     queryFn: fetchTopCurrencies,
   });
+
+  const currencyPairOptions = [
+    { value: 'USD/EUR', label: 'USD/EUR' },
+    { value: 'USD/GBP', label: 'USD/GBP' },
+    { value: 'USD/JPY', label: 'USD/JPY' },
+  ];
 
   // Mock data for demonstration - replace with real API data
   const mockHistoricalData = [
@@ -88,11 +95,12 @@ const CurrencyInsights = () => {
               
               <div>
                 <label className="text-sm text-muted-foreground">Currency Pairs</label>
-                <Select multiple>
-                  <option value="USD/EUR">USD/EUR</option>
-                  <option value="USD/GBP">USD/GBP</option>
-                  <option value="USD/JPY">USD/JPY</option>
-                </Select>
+                <MultiSelect
+                  options={currencyPairOptions}
+                  selected={selectedPairs}
+                  onChange={setSelectedPairs}
+                  placeholder="Select currency pairs..."
+                />
               </div>
 
               <div>
