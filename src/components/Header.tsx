@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export function Header() {
   return (
@@ -12,18 +13,18 @@ export function Header() {
         </div>
         
         <nav className="hidden md:flex items-center gap-8">
-        <a href="#" className="text-gray-400 hover:text-white transition-colors">Dashboard</a>
-        <a href="#" className="text-gray-400 hover:text-white transition-colors">Currency Insights</a>
-        <a href="#" className="text-gray-400 hover:text-white transition-colors">Predictions</a>
-        <a href="#" className="text-gray-400 hover:text-white transition-colors">Risk Analysis</a>
+          <Link to="/" className="text-gray-400 hover:text-white transition-colors">Dashboard</Link>
+          <Link to="/currency-insights" className="text-gray-400 hover:text-white transition-colors">Currency Insights</Link>
+          <Link to="/predictions" className="text-gray-400 hover:text-white transition-colors">Predictions</Link>
+          <Link to="/risk-analysis" className="text-gray-400 hover:text-white transition-colors">Risk Analysis</Link>
         </nav>
 
         <div className="flex items-center gap-4">
           <Button variant="ghost" className="text-gray-400 hover:text-white">
-          Features
+            Features
           </Button>
           <Button className="bg-neon hover:bg-neon/90">
-          Explore RiskLens
+            Explore RiskLens
           </Button>
         </div>
       </div>
