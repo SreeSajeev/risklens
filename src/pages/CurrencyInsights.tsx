@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ const CurrencyInsights = () => {
   const [showMovingAverage, setShowMovingAverage] = useState(false);
   const { toast } = useToast();
 
+  // Query to fetch data from the API
   const { data: topCurrencies, isLoading, error } = useQuery({
     queryKey: ['topCurrencies'],
     queryFn: fetchTopCurrencies,
@@ -37,15 +38,20 @@ const CurrencyInsights = () => {
     }
   });
 
-  // Assuming the response from the API contains an array of currency data
-  // You would replace this with the actual data you get from the API
-  const realHistoricalData: CurrencyRate[] = topCurrencies?.map(currency => ({
-    date: currency.date, // Adjust based on your API's response format
-    USD_EUR: currency.USD_EUR, // Adjust according to your API's response format
-    USD_GBP: currency.USD_GBP, // Adjust according to your API's response format
-  })) || [];
+  // Check if the data structure is correct. Log data for inspection.
+  useEffect(() => {
+    if (topCurrencies) {
+      console.log("Fetched API Data:", topCurrencies); // Log to inspect the response
+    }
+  }, [topCurrencies]);
 
-  // Trend data for displaying on the cards
+  // If there's no data, use fallback values.
+  const realHistoricalData: CurrencyRate[] = topCurrencies ? topCurrencies.map((currency: any) => ({
+    date: currency.date,
+    USD_EUR: currency.USD_EUR,
+    USD_GBP: currency.USD_GBP
+  })) : [];
+
   const trendCards = [
     {
       title: 'Top Mover',
@@ -70,6 +76,7 @@ const CurrencyInsights = () => {
     },
   ];
 
+  // Handling loading and error states
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
