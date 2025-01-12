@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
+    <header className="top-0 left-0 right-0 z-50 px-6 py-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-neon/20 border border-neon/30 flex items-center justify-center">
@@ -13,7 +13,8 @@ export function Header() {
         </div>
         
         <nav className="hidden md:flex items-center gap-8">
-          <Link to="/" className="text-gray-400 hover:text-white transition-colors">Dashboard</Link>
+          <Link to="/dashboard" className="text-gray-400 hover:text-white transition-colors">Dashboard</Link>
+          <Link to="/" className="text-gray-400 hover:text-white transition-colors">Home</Link>
           <Link to="/currency-insights" className="text-gray-400 hover:text-white transition-colors">Currency Insights</Link>
           <Link to="/predictions" className="text-gray-400 hover:text-white transition-colors">Predictions</Link>
           <Link to="/risk-analysis" className="text-gray-400 hover:text-white transition-colors">Risk Analysis</Link>
