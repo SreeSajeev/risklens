@@ -16,9 +16,7 @@ export function Header() {
           <Link to="/dashboard" className="text-gray-400 hover:text-white transition-colors">Dashboard</Link>
           <Link to="/" className="text-gray-400 hover:text-white transition-colors">Home</Link>
           <Link to="/currency-insights" className="text-gray-400 hover:text-white transition-colors">Currency Insights</Link>
-          <Link to="/predictions" className="text-gray-400 hover:text-white transition-colors">Predictions</Link>
         </nav>
-
         <div className="flex items-center gap-4">
           <Button className="bg-neon hover:bg-neon/90" onClick={() => window.location.href = '/explore'}>
             Explore RiskLens

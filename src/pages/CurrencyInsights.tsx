@@ -4,10 +4,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'r
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from '@tanstack/react-query';
 import { fetchTopCurrencies } from '@/lib/api';
 import { ArrowUpRight, ArrowDownRight, TrendingUp, LineChart as LineChartIcon } from 'lucide-react';
@@ -40,13 +37,15 @@ const CurrencyInsights = () => {
     }
   });
 
-  // Mock data for demonstration - replace with real API data
-  const mockHistoricalData: CurrencyRate[] = [
-    { date: '2024-01', USD_EUR: 0.92, USD_GBP: 0.79 },
-    { date: '2024-02', USD_EUR: 0.93, USD_GBP: 0.78 },
-    { date: '2024-03', USD_EUR: 0.91, USD_GBP: 0.77 },
-  ];
+  // Assuming the response from the API contains an array of currency data
+  // You would replace this with the actual data you get from the API
+  const realHistoricalData: CurrencyRate[] = topCurrencies?.map(currency => ({
+    date: currency.date, // Adjust based on your API's response format
+    USD_EUR: currency.USD_EUR, // Adjust according to your API's response format
+    USD_GBP: currency.USD_GBP, // Adjust according to your API's response format
+  })) || [];
 
+  // Trend data for displaying on the cards
   const trendCards = [
     {
       title: 'Top Mover',
@@ -124,7 +123,7 @@ const CurrencyInsights = () => {
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div>
                 <label className="text-sm text-muted-foreground">Currency Pair</label>
                 <Select value={selectedPair} onValueChange={setSelectedPair}>
@@ -158,7 +157,7 @@ const CurrencyInsights = () => {
                     USD_GBP: { label: "USD/GBP", color: "#10B981" }
                   }}
                 >
-                  <LineChart data={mockHistoricalData}>
+                  <LineChart data={realHistoricalData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                     <XAxis dataKey="date" stroke="#6B7280" />
                     <YAxis stroke="#6B7280" />
