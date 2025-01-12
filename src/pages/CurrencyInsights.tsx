@@ -28,13 +28,15 @@ const CurrencyInsights = () => {
   const { data: topCurrencies, isLoading, error } = useQuery({
     queryKey: ['topCurrencies'],
     queryFn: fetchTopCurrencies,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Error fetching currency data",
-        description: "Please try again later.",
-      });
-      console.error("API Error:", error);
+    meta: {
+      onError: (error: Error) => {
+        toast({
+          variant: "destructive",
+          title: "Error fetching currency data",
+          description: "Please try again later.",
+        });
+        console.error("API Error:", error);
+      }
     }
   });
 
