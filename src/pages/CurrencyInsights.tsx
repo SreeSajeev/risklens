@@ -1,20 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useQuery } from '@tanstack/react-query';
 import { fetchTopCurrencies } from '@/lib/api';
-import { ArrowUpRight, ArrowDownRight, TrendingUp, LineChart as LineChartIcon } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, TrendingUp } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
-
-interface CurrencyRate {
-  date: string;
-  USD_EUR: number;
-  USD_GBP: number;
-}
 
 const CurrencyInsights = () => {
   const [selectedTimeRange, setSelectedTimeRange] = useState('1W');
@@ -46,11 +38,7 @@ const CurrencyInsights = () => {
   }, [topCurrencies]);
 
   // If there's no data, use fallback values.
-  const realHistoricalData: CurrencyRate[] = topCurrencies ? topCurrencies.map((currency: any) => ({
-    date: currency.date,
-    USD_EUR: currency.USD_EUR,
-    USD_GBP: currency.USD_GBP
-  })) : [];
+  const realHistoricalData = topCurrencies || [];
 
   const trendCards = [
     {
@@ -101,11 +89,9 @@ const CurrencyInsights = () => {
       <nav className="fixed top-16 left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-40 py-2">
         <div className="container flex items-center gap-4">
           <Button variant="ghost" className="gap-2">
-            <LineChartIcon className="w-4 h-4" />
             Historical
           </Button>
           <Button variant="ghost" className="gap-2">
-            <TrendingUp className="w-4 h-4" />
             Trends
           </Button>
         </div>
@@ -155,28 +141,6 @@ const CurrencyInsights = () => {
           </Card>
 
           <div className="space-y-8">
-            <Card className="p-6">
-              <h2 className="text-xl font-semibold mb-6">Historical Comparison</h2>
-              <div className="h-[400px] w-full">
-                <ChartContainer
-                  config={{
-                    USD_EUR: { label: "USD/EUR", color: "#3B82F6" },
-                    USD_GBP: { label: "USD/GBP", color: "#10B981" }
-                  }}
-                >
-                  <LineChart data={realHistoricalData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                    <XAxis dataKey="date" stroke="#6B7280" />
-                    <YAxis stroke="#6B7280" />
-                    <Tooltip content={<ChartTooltip />} />
-                    <Legend />
-                    <Line type="monotone" dataKey="USD_EUR" stroke="#3B82F6" dot={false} />
-                    <Line type="monotone" dataKey="USD_GBP" stroke="#10B981" dot={false} />
-                  </LineChart>
-                </ChartContainer>
-              </div>
-            </Card>
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {trendCards.map((card, index) => (
                 <Card key={index} className="p-6 hover:border-neon transition-colors">
