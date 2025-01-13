@@ -5,10 +5,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { useQuery } from '@tanstack/react-query';
 import { fetchTopCurrencies, fetchExchangeRate } from '@/lib/api';
-import { ArrowUpRight, ArrowDownRight, TrendingUp, LineChart as LineChartIcon } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, TrendingUp, LineChart as LineChartIcon, ArrowLeft } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Link } from "react-router-dom";  // Import Link
+import { Link } from "react-router-dom";
 
 const CurrencyInsights = () => {
   const [selectedTimeRange, setSelectedTimeRange] = useState('1W');
@@ -196,3 +196,4 @@ const CurrencyInsights = () => {
 };
 
 export default CurrencyInsights;
+
