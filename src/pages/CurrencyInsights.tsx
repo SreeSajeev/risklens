@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchTopCurrencies, fetchExchangeRate } from '@/lib/api';
 import { ArrowUpRight, ArrowDownRight, TrendingUp, LineChart as LineChartIcon } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -114,14 +115,12 @@ const CurrencyInsights = () => {
     <div className="min-h-screen bg-background text-foreground">
       <nav className="fixed top-16 left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-40 py-2">
         <div className="container flex items-center gap-4">
-          <Button variant="ghost" className="gap-2 hover:bg-neon/10 transition-colors duration-300">
-            <LineChartIcon className="w-4 h-4" />
-            Historical
-          </Button>
-          <Button variant="ghost" className="gap-2 hover:bg-neon/10 transition-colors duration-300">
-            <TrendingUp className="w-4 h-4" />
-            Trends
-          </Button>
+        <div className="container flex items-center gap-4">
+          <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary mb-6 group">
+            <ArrowLeft className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" />
+            Back to Home
+          </Link>
+        </div>
         </div>
       </nav>
 
