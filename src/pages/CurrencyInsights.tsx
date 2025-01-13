@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useQuery } from '@tanstack/react-query';
-import { fetchTopCurrencies } from '@/lib/api';
+import { fetchTopCurrencies, fetchExchangeRate } from '@/lib/api';
 import { ArrowUpRight, ArrowDownRight, TrendingUp, LineChart as LineChartIcon } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -20,6 +20,7 @@ const CurrencyInsights = () => {
   const [selectedTimeRange, setSelectedTimeRange] = useState('1W');
   const [selectedPair, setSelectedPair] = useState('USD/EUR');
   const [showMovingAverage, setShowMovingAverage] = useState(false);
+  const [filteredData, setFilteredData] = useState<any[]>([]);
   const { toast } = useToast();
 
   const { data: topCurrencies, isLoading, error } = useQuery({
@@ -36,6 +37,35 @@ const CurrencyInsights = () => {
       }
     }
   });
+
+  // Mock data for demonstration
+  const currencyData = [
+    { date: '2024-03-01', rate: 1.0843, change: '+0.12%', volume: '1.2B' },
+    { date: '2024-03-02', rate: 1.0856, change: '+0.15%', volume: '1.1B' },
+    { date: '2024-03-03', rate: 1.0832, change: '-0.22%', volume: '1.3B' },
+    { date: '2024-03-04', rate: 1.0867, change: '+0.32%', volume: '1.4B' },
+    { date: '2024-03-05', rate: 1.0845, change: '-0.20%', volume: '1.2B' },
+  ];
+
+  useEffect(() => {
+    // Filter data based on selected time range
+    const now = new Date();
+    const filterData = () => {
+      switch (selectedTimeRange) {
+        case '1W':
+          const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          setFilteredData(currencyData.filter(item => new Date(item.date) >= weekAgo));
+          break;
+        case '1M':
+          const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+          setFilteredData(currencyData.filter(item => new Date(item.date) >= monthAgo));
+          break;
+        default:
+          setFilteredData(currencyData);
+      }
+    };
+    filterData();
+  }, [selectedTimeRange]);
 
   const trendCards = [
     {
@@ -61,15 +91,6 @@ const CurrencyInsights = () => {
     },
   ];
 
-  // Mock data for the table
-  const currencyData = [
-    { date: '2024-03-01', rate: 1.0843, change: '+0.12%', volume: '1.2B' },
-    { date: '2024-03-02', rate: 1.0856, change: '+0.15%', volume: '1.1B' },
-    { date: '2024-03-03', rate: 1.0832, change: '-0.22%', volume: '1.3B' },
-    { date: '2024-03-04', rate: 1.0867, change: '+0.32%', volume: '1.4B' },
-    { date: '2024-03-05', rate: 1.0845, change: '-0.20%', volume: '1.2B' },
-  ];
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -93,11 +114,11 @@ const CurrencyInsights = () => {
     <div className="min-h-screen bg-background text-foreground">
       <nav className="fixed top-16 left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-40 py-2">
         <div className="container flex items-center gap-4">
-          <Button variant="ghost" className="gap-2">
+          <Button variant="ghost" className="gap-2 hover:bg-neon/10 transition-colors duration-300">
             <LineChartIcon className="w-4 h-4" />
             Historical
           </Button>
-          <Button variant="ghost" className="gap-2">
+          <Button variant="ghost" className="gap-2 hover:bg-neon/10 transition-colors duration-300">
             <TrendingUp className="w-4 h-4" />
             Trends
           </Button>
@@ -106,13 +127,13 @@ const CurrencyInsights = () => {
 
       <main className="container pt-32 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8">
-          <Card className="p-6 h-fit sticky top-32">
+          <Card className="p-6 h-fit sticky top-32 animate-fade-in">
             <h3 className="text-lg font-semibold mb-4">Filters</h3>
             <div className="space-y-4">
               <div>
                 <label className="text-sm text-muted-foreground">Time Range</label>
                 <Select value={selectedTimeRange} onValueChange={setSelectedTimeRange}>
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full transition-all duration-300 hover:border-neon">
                     <SelectValue placeholder="Select time range" />
                   </SelectTrigger>
                   <SelectContent>
@@ -127,7 +148,7 @@ const CurrencyInsights = () => {
               <div>
                 <label className="text-sm text-muted-foreground">Currency Pair</label>
                 <Select value={selectedPair} onValueChange={setSelectedPair}>
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full transition-all duration-300 hover:border-neon">
                     <SelectValue placeholder="Select currency pair" />
                   </SelectTrigger>
                   <SelectContent>
@@ -140,43 +161,55 @@ const CurrencyInsights = () => {
 
               <div className="flex items-center justify-between">
                 <label className="text-sm text-muted-foreground">Show Moving Average</label>
-                <Switch checked={showMovingAverage} onCheckedChange={setShowMovingAverage} />
+                <Switch 
+                  checked={showMovingAverage} 
+                  onCheckedChange={setShowMovingAverage}
+                  className="data-[state=checked]:bg-neon"
+                />
               </div>
 
-              <Button className="w-full bg-neon hover:bg-neon/90">Apply Filters</Button>
+              <Button className="w-full bg-neon hover:bg-neon/90 transition-all duration-300 transform hover:scale-105">
+                Apply Filters
+              </Button>
             </div>
           </Card>
 
           <div className="space-y-8">
-            <Card className="p-6">
+            <Card className="p-6 animate-fade-in">
               <h2 className="text-xl font-semibold mb-6">Historical Data</h2>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Rate</TableHead>
-                    <TableHead>Change</TableHead>
-                    <TableHead>Volume</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {currencyData.map((row, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{row.date}</TableCell>
-                      <TableCell>{row.rate}</TableCell>
-                      <TableCell className={row.change.startsWith('+') ? 'text-green-500' : 'text-red-500'}>
-                        {row.change}
-                      </TableCell>
-                      <TableCell>{row.volume}</TableCell>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Rate</TableHead>
+                      <TableHead>Change</TableHead>
+                      <TableHead>Volume</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredData.map((row, index) => (
+                      <TableRow key={index} className="hover:bg-neon/5 transition-colors duration-200">
+                        <TableCell>{row.date}</TableCell>
+                        <TableCell>{row.rate}</TableCell>
+                        <TableCell className={row.change.startsWith('+') ? 'text-green-500' : 'text-red-500'}>
+                          {row.change}
+                        </TableCell>
+                        <TableCell>{row.volume}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </Card>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {trendCards.map((card, index) => (
-                <Card key={index} className="p-6 hover:border-neon transition-colors">
+                <Card 
+                  key={index} 
+                  className="p-6 hover:border-neon transition-all duration-300 transform hover:scale-105 animate-fade-in"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
                   <div className="flex items-start justify-between mb-2">
                     <div>
                       <h3 className="text-sm text-muted-foreground">{card.title}</h3>
