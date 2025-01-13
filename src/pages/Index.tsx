@@ -43,7 +43,7 @@ const Index = () => {
                 Assess your investment risk instantly by analyzing investment amount, volatility, and risk tolerance. Get clear insights with our easy-to-use calculator.
                 <br /><br />
                 Whether you're a cautious investor or looking to take on more risk, the Risk Calculator gives you a clear understanding of how external factors like exchange rate fluctuations might impact your portfolio. 
-                Make informed decisions with ease and confidence, knowing the risk associated with your investments.
+                <br /><br />Make informed decisions with ease and confidence, knowing the risk associated with your investments.
               </p>
               <Link to="/risk-calculator">
                 <Button variant="outline" className="w-full group-hover:border-neon/50 group-hover:text-neon transition-colors">
@@ -58,7 +58,6 @@ const Index = () => {
                 Get short-term predictions based on real-time data and forecasting models.
               </p>
               <CurrencyConverter />
-              <Button variant="outline" className="w-full">View Predictions</Button>
             </div>
 
             <div className="glass p-6">
