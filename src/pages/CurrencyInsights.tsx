@@ -155,21 +155,6 @@ const CurrencyInsights = () => {
                   </SelectContent>
                 </Select>
               </div>
-              
-              <div>
-                <label className="text-sm text-muted-foreground">Currency Pair</label>
-                <Select value={selectedPair} onValueChange={setSelectedPair}>
-                  <SelectTrigger className="w-full transition-all duration-300 hover:border-neon">
-                    <SelectValue placeholder="Select currency pair" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="USD/EUR">USD/EUR</SelectItem>
-                    <SelectItem value="USD/GBP">USD/GBP</SelectItem>
-                    <SelectItem value="USD/JPY">USD/JPY</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
               <div className="flex items-center justify-between">
                 <label className="text-sm text-muted-foreground">Show Moving Average</label>
                 <Switch 
