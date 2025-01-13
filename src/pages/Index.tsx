@@ -41,6 +41,8 @@ const Index = () => {
               </div>
               <p className="text-sm text-gray-400 mb-4">
                 Assess your investment risk instantly by analyzing investment amount, volatility, and risk tolerance. Get clear insights with our easy-to-use calculator.
+                Whether you're a cautious investor or looking to take on more risk, the Risk Calculator gives you a clear understanding of how external factors like exchange rate fluctuations might impact your portfolio. 
+                Make informed decisions with ease and confidence, knowing the risk associated with your investments.
               </p>
               <Link to="/risk-calculator">
                 <Button variant="outline" className="w-full group-hover:border-neon/50 group-hover:text-neon transition-colors">
@@ -59,13 +61,14 @@ const Index = () => {
             </div>
 
             <div className="glass p-6">
-              <h3 className="text-lg font-medium mb-2">Geopolitical Risk Tracker</h3>
+              <h3 className="text-lg font-medium mb-2">Financial Planning</h3>
               <p className="text-sm text-gray-400 mb-4">
-                Stay informed on global events, 
-                from geopolitical shifts to economic policies,
-                and understand their potential impact on currency markets.
+              Plan your future expenses and income with currency exchange rate projections.
+              Easily assess how fluctuations in currency exchange rates could impact your financial future. 
+              Whether you are a business owner managing international transactions or an individual planning personal finances,
+              this tool helps you forecast changes in your income, expenses, or profits based on real-time exchange rate projections.
               </p>
-              <Button variant="outline">Track Risks</Button>
+              <Button variant="outline">Plan your Future Now!</Button>
             </div>
           </div>
         </div>
