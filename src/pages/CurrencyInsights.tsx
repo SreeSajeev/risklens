@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { useQuery } from '@tanstack/react-query';
 import { fetchTopCurrencies, fetchExchangeRate } from '@/lib/api';
-import { ArrowUpRight ,ArrowLeft,ArrowDownRight, TrendingUp, LineChart as LineChartIcon } from 'lucide-react';
+import { ArrowUpRight ,ArrowLeft,ArrowDownRight, TrendingUp } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import {
@@ -21,54 +21,7 @@ const CurrencyInsights = () => {
   const [selectedTimeRange, setSelectedTimeRange] = useState('1W');
   const [selectedPair, setSelectedPair] = useState('USD/EUR');
   const [showMovingAverage, setShowMovingAverage] = useState(false);
-  const [filteredData, setFilteredData] = useState<any[]>([]);
-  const { toast } = useToast();
-
-  const { data: topCurrencies, isLoading, error } = useQuery({
-    queryKey: ['topCurrencies'],
-    queryFn: fetchTopCurrencies,
-    meta: {
-      onError: (error: Error) => {
-        toast({
-          variant: "destructive",
-          title: "Error fetching currency data",
-          description: "Please try again later.",
-        });
-        console.error("API Error:", error);
-      }
-    }
-  });
-
-  // Mock data for demonstration
-  const currencyData = [
-    { date: '2024-03-01', rate: 1.0843, change: '+0.12%', volume: '1.2B' },
-    { date: '2024-03-02', rate: 1.0856, change: '+0.15%', volume: '1.1B' },
-    { date: '2024-03-03', rate: 1.0832, change: '-0.22%', volume: '1.3B' },
-    { date: '2024-03-04', rate: 1.0867, change: '+0.32%', volume: '1.4B' },
-    { date: '2024-03-05', rate: 1.0845, change: '-0.20%', volume: '1.2B' },
-  ];
-
-  useEffect(() => {
-    // Filter data based on selected time range
-    const now = new Date();
-    const filterData = () => {
-      switch (selectedTimeRange) {
-        case '1W':
-          const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-          setFilteredData(currencyData.filter(item => new Date(item.date) >= weekAgo));
-          break;
-        case '1M':
-          const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-          setFilteredData(currencyData.filter(item => new Date(item.date) >= monthAgo));
-          break;
-        default:
-          setFilteredData(currencyData);
-      }
-    };
-    filterData();
-  }, [selectedTimeRange]);
-
-  const trendCards = [
+  const [trendCards, setTrendCards] = useState([
     {
       title: 'Top Mover',
       value: '+3.2%',
@@ -90,7 +43,57 @@ const CurrencyInsights = () => {
       icon: <TrendingUp className="w-6 h-6 text-blue-500" />,
       trend: 'stable'
     },
-  ];
+  ]);
+  
+  const { toast } = useToast();
+
+  const { data: topCurrencies, isLoading, error } = useQuery({
+    queryKey: ['topCurrencies'],
+    queryFn: fetchTopCurrencies,
+    meta: {
+      onError: (error: Error) => {
+        toast({
+          variant: "destructive",
+          title: "Error fetching currency data",
+          description: "Please try again later.",
+        });
+        console.error("API Error:", error);
+      }
+    }
+  });
+
+  useEffect(() => {
+    // Update trendCards based on selected time range (1W or 1M)
+    const fetchTopMovers = async () => {
+      // Simulate a dynamic update for top movers based on selected time range
+      const updatedTrendCards = [
+        {
+          title: 'Top Mover',
+          value: selectedTimeRange === '1W' ? '+3.2%' : '+5.1%',
+          pair: 'EUR/USD',
+          icon: <ArrowUpRight className="w-6 h-6 text-green-500" />,
+          trend: 'up'
+        },
+        {
+          title: 'Biggest Drop',
+          value: selectedTimeRange === '1W' ? '-2.1%' : '-3.5%',
+          pair: 'GBP/USD',
+          icon: <ArrowDownRight className="w-6 h-6 text-red-500" />,
+          trend: 'down'
+        },
+        {
+          title: 'Most Stable',
+          value: selectedTimeRange === '1W' ? '±0.3%' : '±0.8%',
+          pair: 'USD/JPY',
+          icon: <TrendingUp className="w-6 h-6 text-blue-500" />,
+          trend: 'stable'
+        },
+      ];
+      setTrendCards(updatedTrendCards);
+    };
+
+    fetchTopMovers();
+  }, [selectedTimeRange]);
 
   if (isLoading) {
     return (
@@ -115,12 +118,10 @@ const CurrencyInsights = () => {
     <div className="min-h-screen bg-background text-foreground">
       <nav className="fixed top-16 left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-40 py-2">
         <div className="container flex items-center gap-4">
-        <div className="container flex items-center gap-4">
           <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary mb-6 group">
             <ArrowLeft className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" />
             Back to Home
           </Link>
-        </div>
         </div>
       </nav>
 
@@ -174,34 +175,6 @@ const CurrencyInsights = () => {
           </Card>
 
           <div className="space-y-8">
-            <Card className="p-6 animate-fade-in">
-              <h2 className="text-xl font-semibold mb-6">Historical Data</h2>
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Rate</TableHead>
-                      <TableHead>Change</TableHead>
-                      <TableHead>Volume</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredData.map((row, index) => (
-                      <TableRow key={index} className="hover:bg-neon/5 transition-colors duration-200">
-                        <TableCell>{row.date}</TableCell>
-                        <TableCell>{row.rate}</TableCell>
-                        <TableCell className={row.change.startsWith('+') ? 'text-green-500' : 'text-red-500'}>
-                          {row.change}
-                        </TableCell>
-                        <TableCell>{row.volume}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </Card>
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {trendCards.map((card, index) => (
                 <Card 
