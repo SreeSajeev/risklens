@@ -14,7 +14,6 @@ export function Header() {
         
         <nav className="hidden md:flex items-center gap-8">
           <Link to="/dashboard" className="text-gray-400 hover:text-white transition-colors">Dashboard</Link>
-          <Link to="/" className="text-gray-400 hover:text-white transition-colors">Home</Link>
           <Link to="/currency-insights" className="text-gray-400 hover:text-white transition-colors">Currency Insights</Link>
           <Link to="/risk-calculator" className="text-gray-400 hover:text-white transition-colors">Risk Calculator</Link>
         </nav>
