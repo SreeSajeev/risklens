@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
-import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from '@tanstack/react-query';
 import { fetchTopCurrencies } from '@/lib/api';
 import { ArrowUpRight, ArrowDownRight, TrendingUp, LineChart as LineChartIcon } from 'lucide-react';
-import { useToast } from "@/components/ui/use-toast";
-
-interface CurrencyRate {
-  date: string;
-  USD_EUR: number;
-  USD_GBP: number;
-}
+import { useToast } from "@/hooks/use-toast";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const CurrencyInsights = () => {
   const [selectedTimeRange, setSelectedTimeRange] = useState('1W');
@@ -39,13 +36,6 @@ const CurrencyInsights = () => {
       }
     }
   });
-
-  // Mock data for demonstration - replace with real API data
-  const mockHistoricalData: CurrencyRate[] = [
-    { date: '2024-01', USD_EUR: 0.92, USD_GBP: 0.79 },
-    { date: '2024-02', USD_EUR: 0.93, USD_GBP: 0.78 },
-    { date: '2024-03', USD_EUR: 0.91, USD_GBP: 0.77 },
-  ];
 
   const trendCards = [
     {
@@ -69,6 +59,15 @@ const CurrencyInsights = () => {
       icon: <TrendingUp className="w-6 h-6 text-blue-500" />,
       trend: 'stable'
     },
+  ];
+
+  // Mock data for the table
+  const currencyData = [
+    { date: '2024-03-01', rate: 1.0843, change: '+0.12%', volume: '1.2B' },
+    { date: '2024-03-02', rate: 1.0856, change: '+0.15%', volume: '1.1B' },
+    { date: '2024-03-03', rate: 1.0832, change: '-0.22%', volume: '1.3B' },
+    { date: '2024-03-04', rate: 1.0867, change: '+0.32%', volume: '1.4B' },
+    { date: '2024-03-05', rate: 1.0845, change: '-0.20%', volume: '1.2B' },
   ];
 
   if (isLoading) {
@@ -139,7 +138,7 @@ const CurrencyInsights = () => {
                 </Select>
               </div>
 
-              <div>
+              <div className="flex items-center justify-between">
                 <label className="text-sm text-muted-foreground">Show Moving Average</label>
                 <Switch checked={showMovingAverage} onCheckedChange={setShowMovingAverage} />
               </div>
@@ -149,28 +148,31 @@ const CurrencyInsights = () => {
           </Card>
 
           <div className="space-y-8">
-            {/* Temporarily commenting out the chart to fix the error */}
-            {/* <Card className="p-6">
-              <h2 className="text-xl font-semibold mb-6">Historical Comparison</h2>
-              <div className="h-[400px] w-full">
-                <ChartContainer
-                  config={{
-                    USD_EUR: { label: "USD/EUR", color: "#3B82F6" },
-                    USD_GBP: { label: "USD/GBP", color: "#10B981" }
-                  }}
-                >
-                  <LineChart data={mockHistoricalData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                    <XAxis dataKey="date" stroke="#6B7280" />
-                    <YAxis stroke="#6B7280" />
-                    <Tooltip content={<ChartTooltip />} />
-                    <Legend />
-                    <Line type="monotone" dataKey="USD_EUR" stroke="#3B82F6" dot={false} />
-                    <Line type="monotone" dataKey="USD_GBP" stroke="#10B981" dot={false} />
-                  </LineChart>
-                </ChartContainer>
-              </div>
-            </Card> */}
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold mb-6">Historical Data</h2>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Rate</TableHead>
+                    <TableHead>Change</TableHead>
+                    <TableHead>Volume</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {currencyData.map((row, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{row.date}</TableCell>
+                      <TableCell>{row.rate}</TableCell>
+                      <TableCell className={row.change.startsWith('+') ? 'text-green-500' : 'text-red-500'}>
+                        {row.change}
+                      </TableCell>
+                      <TableCell>{row.volume}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Card>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {trendCards.map((card, index) => (
