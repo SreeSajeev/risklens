@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { useQuery } from '@tanstack/react-query';
 import { fetchTopCurrencies, fetchExchangeRate } from '@/lib/api';
-import { ArrowUpRight ,ArrowLeft,ArrowDownRight, TrendingUp } from 'lucide-react';
+import { ArrowUpRight, ArrowLeft, ArrowDownRight, TrendingUp } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import {
@@ -21,29 +21,7 @@ const CurrencyInsights = () => {
   const [selectedTimeRange, setSelectedTimeRange] = useState('1W');
   const [selectedPair, setSelectedPair] = useState('USD/EUR');
   const [showMovingAverage, setShowMovingAverage] = useState(false);
-  const [trendCards, setTrendCards] = useState([
-    {
-      title: 'Top Mover',
-      value: '+3.2%',
-      pair: 'EUR/USD',
-      icon: <ArrowUpRight className="w-6 h-6 text-green-500" />,
-      trend: 'up'
-    },
-    {
-      title: 'Biggest Drop',
-      value: '-2.1%',
-      pair: 'GBP/USD',
-      icon: <ArrowDownRight className="w-6 h-6 text-red-500" />,
-      trend: 'down'
-    },
-    {
-      title: 'Most Stable',
-      value: '±0.3%',
-      pair: 'USD/JPY',
-      icon: <TrendingUp className="w-6 h-6 text-blue-500" />,
-      trend: 'stable'
-    },
-  ]);
+  const [trendCards, setTrendCards] = useState([]);
   
   const { toast } = useToast();
 
@@ -63,37 +41,28 @@ const CurrencyInsights = () => {
   });
 
   useEffect(() => {
-    // Update trendCards based on selected time range (1W or 1M)
+    // Fetch top movers based on selected filters
     const fetchTopMovers = async () => {
-      // Simulate a dynamic update for top movers based on selected time range
-      const updatedTrendCards = [
-        {
-          title: 'Top Mover',
-          value: selectedTimeRange === '1W' ? '+3.2%' : '+5.1%',
-          pair: 'EUR/USD',
-          icon: <ArrowUpRight className="w-6 h-6 text-green-500" />,
-          trend: 'up'
-        },
-        {
-          title: 'Biggest Drop',
-          value: selectedTimeRange === '1W' ? '-2.1%' : '-3.5%',
-          pair: 'GBP/USD',
-          icon: <ArrowDownRight className="w-6 h-6 text-red-500" />,
-          trend: 'down'
-        },
-        {
-          title: 'Most Stable',
-          value: selectedTimeRange === '1W' ? '±0.3%' : '±0.8%',
-          pair: 'USD/JPY',
-          icon: <TrendingUp className="w-6 h-6 text-blue-500" />,
-          trend: 'stable'
-        },
-      ];
+      if (!topCurrencies) return;
+
+      const filteredData = topCurrencies.filter(currency => {
+        // Filter by the selected currency pair and time range
+        return currency.pair === selectedPair && currency.timeRange === selectedTimeRange;
+      });
+
+      const updatedTrendCards = filteredData.map((currency) => ({
+        title: currency.title,
+        value: currency.value,
+        pair: currency.pair,
+        icon: currency.icon,
+        trend: currency.trend
+      }));
+      
       setTrendCards(updatedTrendCards);
     };
 
     fetchTopMovers();
-  }, [selectedTimeRange]);
+  }, [selectedTimeRange, selectedPair, topCurrencies]);
 
   if (isLoading) {
     return (
@@ -176,25 +145,31 @@ const CurrencyInsights = () => {
 
           <div className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {trendCards.map((card, index) => (
-                <Card 
-                  key={index} 
-                  className="p-6 hover:border-neon transition-all duration-300 transform hover:scale-105 animate-fade-in"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <h3 className="text-sm text-muted-foreground">{card.title}</h3>
-                      <p className="text-2xl font-semibold">{card.value}</p>
-                      <p className="text-sm text-muted-foreground">{card.pair}</p>
-                    </div>
-                    {card.icon}
-                  </div>
-                  <div className="h-[60px] mt-4">
-                    <div className="w-full h-full bg-muted/20 rounded animate-pulse" />
-                  </div>
+              {trendCards.length === 0 ? (
+                <Card className="p-6">
+                  <p className="text-center text-muted-foreground">No data available for the selected filters.</p>
                 </Card>
-              ))}
+              ) : (
+                trendCards.map((card, index) => (
+                  <Card 
+                    key={index} 
+                    className="p-6 hover:border-neon transition-all duration-300 transform hover:scale-105 animate-fade-in"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <h3 className="text-sm text-muted-foreground">{card.title}</h3>
+                        <p className="text-2xl font-semibold">{card.value}</p>
+                        <p className="text-sm text-muted-foreground">{card.pair}</p>
+                      </div>
+                      {card.icon}
+                    </div>
+                    <div className="h-[60px] mt-4">
+                      <div className="w-full h-full bg-muted/20 rounded animate-pulse" />
+                    </div>
+                  </Card>
+                ))
+              )}
             </div>
           </div>
         </div>
