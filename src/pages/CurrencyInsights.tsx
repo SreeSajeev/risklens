@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { useQuery } from '@tanstack/react-query';
 import { fetchTopCurrencies, fetchExchangeRate } from '@/lib/api';
-import { ArrowUpRight ,ArrowLeft,ArrowDownRight, TrendingUp } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, TrendingUp, ArrowLeft } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import {
@@ -63,37 +63,48 @@ const CurrencyInsights = () => {
   });
 
   useEffect(() => {
-    // Update trendCards based on selected time range (1W or 1M)
     const fetchTopMovers = async () => {
-      // Simulate a dynamic update for top movers based on selected time range
-      const updatedTrendCards = [
-        {
-          title: 'Top Mover',
-          value: selectedTimeRange === '1W' ? '+3.2%' : '+5.1%',
-          pair: 'EUR/USD',
-          icon: <ArrowUpRight className="w-6 h-6 text-green-500" />,
-          trend: 'up'
-        },
-        {
-          title: 'Biggest Drop',
-          value: selectedTimeRange === '1W' ? '-2.1%' : '-3.5%',
-          pair: 'GBP/USD',
-          icon: <ArrowDownRight className="w-6 h-6 text-red-500" />,
-          trend: 'down'
-        },
-        {
-          title: 'Most Stable',
-          value: selectedTimeRange === '1W' ? '±0.3%' : '±0.8%',
-          pair: 'USD/JPY',
-          icon: <TrendingUp className="w-6 h-6 text-blue-500" />,
-          trend: 'stable'
-        },
-      ];
-      setTrendCards(updatedTrendCards);
+      try {
+        // Convert the object to an array of [currency, rate] pairs if topCurrencies is available
+        const currencyPairs = topCurrencies ? Object.entries(topCurrencies) : [];
+        
+        // Calculate percentage changes (mock data for demonstration)
+        const updatedTrendCards = [
+          {
+            title: 'Top Mover',
+            value: selectedTimeRange === '1W' ? '+3.2%' : '+5.1%',
+            pair: 'EUR/USD',
+            icon: <ArrowUpRight className="w-6 h-6 text-green-500" />,
+            trend: 'up'
+          },
+          {
+            title: 'Biggest Drop',
+            value: selectedTimeRange === '1W' ? '-2.1%' : '-3.5%',
+            pair: 'GBP/USD',
+            icon: <ArrowDownRight className="w-6 h-6 text-red-500" />,
+            trend: 'down'
+          },
+          {
+            title: 'Most Stable',
+            value: selectedTimeRange === '1W' ? '±0.3%' : '±0.8%',
+            pair: 'USD/JPY',
+            icon: <TrendingUp className="w-6 h-6 text-blue-500" />,
+            trend: 'stable'
+          },
+        ];
+        setTrendCards(updatedTrendCards);
+      } catch (error) {
+        console.error('Error fetching top movers:', error);
+        toast({
+          variant: "destructive",
+          title: "Error updating trends",
+          description: "Please try again later.",
+        });
+      }
     };
 
     fetchTopMovers();
-  }, [selectedTimeRange]);
+  }, [selectedTimeRange, topCurrencies, toast]);
 
   if (isLoading) {
     return (
