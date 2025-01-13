@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { useQuery } from '@tanstack/react-query';
 import { fetchTopCurrencies, fetchExchangeRate } from '@/lib/api';
-import { ArrowUpRight, ArrowDownRight, TrendingUp, LineChart as LineChartIcon } from 'lucide-react';
+import { ArrowUpRight ,ArrowLeft,ArrowDownRight, TrendingUp, LineChart as LineChartIcon } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import {
