@@ -5,10 +5,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { useQuery } from '@tanstack/react-query';
 import { fetchTopCurrencies, fetchExchangeRate } from '@/lib/api';
-import { ArrowUpRight, ArrowDownRight, TrendingUp, LineChart as LineChartIcon, ArrowLeft } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, TrendingUp, LineChart as LineChartIcon } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Link } from "react-router-dom";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const CurrencyInsights = () => {
   const [selectedTimeRange, setSelectedTimeRange] = useState('1W');
@@ -32,6 +38,7 @@ const CurrencyInsights = () => {
     }
   });
 
+  // Mock data for demonstration
   const currencyData = [
     { date: '2024-03-01', rate: 1.0843, change: '+0.12%', volume: '1.2B' },
     { date: '2024-03-02', rate: 1.0856, change: '+0.15%', volume: '1.1B' },
@@ -41,6 +48,7 @@ const CurrencyInsights = () => {
   ];
 
   useEffect(() => {
+    // Filter data based on selected time range
     const now = new Date();
     const filterData = () => {
       switch (selectedTimeRange) {
@@ -106,10 +114,14 @@ const CurrencyInsights = () => {
     <div className="min-h-screen bg-background text-foreground">
       <nav className="fixed top-16 left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-40 py-2">
         <div className="container flex items-center gap-4">
-          <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary mb-6 group">
-            <ArrowLeft className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" />
-            Back to Home
-          </Link>
+          <Button variant="ghost" className="gap-2 hover:bg-neon/10 transition-colors duration-300">
+            <LineChartIcon className="w-4 h-4" />
+            Historical
+          </Button>
+          <Button variant="ghost" className="gap-2 hover:bg-neon/10 transition-colors duration-300">
+            <TrendingUp className="w-4 h-4" />
+            Trends
+          </Button>
         </div>
       </nav>
 
@@ -132,7 +144,7 @@ const CurrencyInsights = () => {
                   </SelectContent>
                 </Select>
               </div>
-
+              
               <div>
                 <label className="text-sm text-muted-foreground">Currency Pair</label>
                 <Select value={selectedPair} onValueChange={setSelectedPair}>
@@ -180,7 +192,9 @@ const CurrencyInsights = () => {
                       <TableRow key={index} className="hover:bg-neon/5 transition-colors duration-200">
                         <TableCell>{row.date}</TableCell>
                         <TableCell>{row.rate}</TableCell>
-                        <TableCell>{row.change}</TableCell>
+                        <TableCell className={row.change.startsWith('+') ? 'text-green-500' : 'text-red-500'}>
+                          {row.change}
+                        </TableCell>
                         <TableCell>{row.volume}</TableCell>
                       </TableRow>
                     ))}
@@ -188,6 +202,28 @@ const CurrencyInsights = () => {
                 </Table>
               </div>
             </Card>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {trendCards.map((card, index) => (
+                <Card 
+                  key={index} 
+                  className="p-6 hover:border-neon transition-all duration-300 transform hover:scale-105 animate-fade-in"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <div>
+                      <h3 className="text-sm text-muted-foreground">{card.title}</h3>
+                      <p className="text-2xl font-semibold">{card.value}</p>
+                      <p className="text-sm text-muted-foreground">{card.pair}</p>
+                    </div>
+                    {card.icon}
+                  </div>
+                  <div className="h-[60px] mt-4">
+                    <div className="w-full h-full bg-muted/20 rounded animate-pulse" />
+                  </div>
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
       </main>
@@ -196,4 +232,3 @@ const CurrencyInsights = () => {
 };
 
 export default CurrencyInsights;
-
