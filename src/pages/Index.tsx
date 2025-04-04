@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { CurrencyConverter } from "@/components/CurrencyConverter";
@@ -58,6 +59,11 @@ const Index = () => {
                 Get short-term predictions based on real-time data and forecasting models.
               </p>
               <CurrencyConverter />
+              <Link to="/dashboard">
+                <Button variant="outline" className="w-full mt-4 hover:border-neon/50 hover:text-neon transition-colors">
+                  View Dashboard
+                </Button>
+              </Link>
             </div>
 
             <div className="glass p-6">
@@ -69,7 +75,11 @@ const Index = () => {
               Whether you are a business owner managing international transactions or an individual planning personal finances,
               this tool helps you forecast changes in your income, expenses, or profits based on real-time exchange rate projections.
               </p>
-              <Button variant="outline">Plan your Future Now!</Button>
+              <Link to="/financial-planning">
+                <Button variant="outline" className="w-full hover:border-neon/50 hover:text-neon transition-colors">
+                  Plan your Future Now!
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

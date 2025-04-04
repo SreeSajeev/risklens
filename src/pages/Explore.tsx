@@ -1,6 +1,8 @@
+
 import { Button } from "@/components/ui/button";
-import { DollarSign, BarChart3, TrendingUp } from "lucide-react";
+import { DollarSign, BarChart3, TrendingUp, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
 const Explore = () => {
   const features = [
@@ -24,20 +26,33 @@ const Explore = () => {
       icon: <TrendingUp className="w-12 h-12 text-neon" />,
       link: "/currency-insights",
       buttonText: "Explore Insights"
+    },
+    {
+      title: "Project Documentation",
+      description: "Comprehensive documentation about RiskLens including project overview, intended users, features, technical details, and future roadmap. Understand how the platform works and how it can benefit your financial planning.",
+      icon: <FileText className="w-12 h-12 text-neon" />,
+      link: "/documentation",
+      buttonText: "View Documentation"
     }
   ];
 
   return (
     <div className="min-h-screen bg-background pt-24 px-6">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-4 animate-fade-in">
-          Explore RiskLens Features
-        </h1>
-        <p className="text-gray-400 text-center mb-12 max-w-2xl mx-auto animate-fade-in">
-          Discover powerful tools for currency analysis, conversion, and market insights
-        </p>
+        <div className="mb-8">
+          <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary mb-6 group">
+            <ArrowLeft className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" />
+            Back to Home
+          </Link>
+          <h1 className="text-4xl font-bold text-center mb-4 animate-fade-in">
+            Explore RiskLens Features
+          </h1>
+          <p className="text-gray-400 text-center mb-12 max-w-2xl mx-auto animate-fade-in">
+            Discover powerful tools for currency analysis, conversion, and market insights
+          </p>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
           {features.map((feature, index) => (
             <div
               key={feature.title}

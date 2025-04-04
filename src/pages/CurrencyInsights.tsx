@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -65,8 +66,9 @@ const CurrencyInsights = () => {
   useEffect(() => {
     const fetchTopMovers = async () => {
       try {
-        // Convert the object to an array of [currency, rate] pairs if topCurrencies is available
-        const currencyPairs = topCurrencies ? Object.entries(topCurrencies) : [];
+        // In this function, we need to handle topCurrencies correctly
+        // It's an object, not an array, so we need to convert it
+        // We'll use safer code that doesn't rely on .filter()
         
         // Calculate percentage changes (mock data for demonstration)
         const updatedTrendCards = [
