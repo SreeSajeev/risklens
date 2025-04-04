@@ -217,9 +217,7 @@ const Login = () => {
           </Tabs>
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
-          <div className="text-sm text-gray-400 text-center mt-2">
-            This is a demo application. Your data is stored locally in your browser.
-          </div>
+          {/* The line about data being stored locally has been removed */}
         </CardFooter>
       </Card>
     </div>
