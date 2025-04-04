@@ -1,8 +1,12 @@
 
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
+import { LogIn, LogOut, User } from "lucide-react";
 
 export function Header() {
+  const { user, logout, isAuthenticated } = useAuth();
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -24,6 +28,29 @@ export function Header() {
           <Link to="/financial-planning" className="text-gray-400 hover:text-white transition-colors">Financial Planning</Link>
         </nav>
         <div className="flex items-center gap-4">
+          {isAuthenticated ? (
+            <div className="flex items-center gap-4">
+              <div className="text-sm text-gray-300 hidden md:block">
+                <span className="font-medium">{user?.name || user?.email}</span>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="border-gray-600 text-gray-300 hover:text-white"
+                onClick={logout}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Logout</span>
+              </Button>
+            </div>
+          ) : (
+            <Link to="/login">
+              <Button className="bg-neon/20 hover:bg-neon/30 text-neon border border-neon/30">
+                <User className="mr-2 h-4 w-4" />
+                <span>Login</span>
+              </Button>
+            </Link>
+          )}
           <Link to="/explore">
             <Button className="bg-neon hover:bg-neon/90">
               Explore RiskLens
